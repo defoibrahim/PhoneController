@@ -1,8 +1,8 @@
 const mongoos = require('mongoose')
 const validator = require('validator')
-const Task = require('./task')
+const Device = require('./device')
 const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken') 
 
 const userSchema = new mongoos.Schema({
     name:{
@@ -50,7 +50,6 @@ const userSchema = new mongoos.Schema({
 })
 
 
-
 //generat token for each user
 userSchema.methods.generateAuthToken = async function (){
     const user = this
@@ -63,8 +62,8 @@ userSchema.methods.generateAuthToken = async function (){
 }
 
 
-userSchema.virtual('tasks',{
-    ref: 'Task',
+userSchema.virtual('devices',{
+    ref: 'Device',
     localField: '_id',
     foreignField: 'owner' 
 });
@@ -107,10 +106,10 @@ userSchema.pre('save',async function (next){
     next()
 })
 
-// delete tasks when user removed ( on casecade )
+// delete devices when user removed ( on casecade )
 userSchema.pre('remove',async function (next){
     const user = this
-    await Task.deleteMany({ owner:user._id })
+    await Device.deleteMany({ owner:user._id })
     next()
 })
 

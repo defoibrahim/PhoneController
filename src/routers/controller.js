@@ -92,7 +92,4 @@ router.post('/opration/location', async (req, res) => {
 });
 
 
-
-
-
 module.exports = router
