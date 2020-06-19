@@ -40,19 +40,21 @@ router.post('/users/login', async(req, res) => {
     }
 });
 
-
-// //check
-// router.post('/users/check', async(req, res) => {
+// logout 
+router.post('/users/logout', auth, async (req, res) => {
+    try {
+       
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token
+        })
+        await req.user.save()
+        res.send();
+        
+    } catch (err) {
+        res.status(500).send()
+    }
     
-//     nmap.scan(opts, function(err, report) {
-//         if (err) throw new Error(err);
-      
-//         for (let item in report) {
-//           console.log(JSON.stringify(report[item]));
-//         }
-//       });
- 
-// });
+});
 
 //get user by id
 router.get('/users/:id', async (req, res) => {

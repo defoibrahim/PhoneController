@@ -48,7 +48,7 @@ router.get('/devices', auth, async (req, res) => {
 // update Device
 router.patch('/devices/:id', auth, async(req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['desc','complated']
+    const allowedUpdates = ['name','color','imei','type','owner']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
@@ -72,6 +72,32 @@ router.patch('/devices/:id', auth, async(req, res) => {
 
 });
 
+// transfer Device
+router.patch('/devices/transfer/:id', auth, async(req, res) => {
+    
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['owner']
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+    if (!isValidOperation) {
+        return res.status(404).send({error:'Invalid Operation '})
+    }
+    try {
+        const device = await Device.findOne({ _id: req.params.id , owner:req.user._id})
+
+        if (!device) {
+            return res.status(404).send()
+        } 
+
+        updates.forEach((update) => device[update] = req.body[update])
+        await device.save()
+
+        res.status(201).send(device.name + "Transfered successfully "); 
+    } catch (err) {
+        res.status(500).send('error' +err)
+    }
+
+});
 // delete Device
 router.delete('/devices/:id', auth, async (req, res) => {
     try {
