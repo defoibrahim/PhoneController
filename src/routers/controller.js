@@ -3,15 +3,7 @@ const auth = require('../middleware/auth')
 const express = require('express')
 const router = new express.Router
 const jwt = require('jsonwebtoken') 
-const nmap =  require('libnmap')
-const opts = {
-    range: [
-      'scanme.nmap.org',
-      '10.0.2.0/25',
-      '192.168.10.80-120',
-      'fe80::42:acff:fe11:fd4e/64'
-    ]
-  };
+
 
 
 // add new user
